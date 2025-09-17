@@ -1,0 +1,8 @@
+# Variaveis do vscode
+.vscode
+
+# Node-modules
+node_modules
+
+# variaveis de ambiente
+.env
