@@ -1,7 +1,8 @@
 import Connection from "../config/db.config";
 import { DataTypes, Model, Optional, Sequelize } from "sequelize";
+import Battles from "./Battle.modal";
 
-//Define os atributos de viloes
+//Define os atributos de herois
 interface HeroAttributes {
   id?: number; //ID pode receber null
   nome: string;
@@ -10,17 +11,17 @@ interface HeroAttributes {
   derrotas: number;
 }
 
-//Define os atributos que podem ser opcionais para o vilão
+//Define os atributos que podem ser opcionais para o herois
 interface HeroCreationAttributes extends Optional<HeroAttributes, "id" | "vitorias" | "derrotas"> {}
 
 /**
  * A seguir, criamos uma classe filha que estende a classe abstrata Model do Sequelize.
  *
- * - A interface `VilianAttributes` define os atributos obrigatórios e opcionais do modelo Vilian.
- * - A interface `VilianCreationAttributes` estende `Optional` do Sequelize para declarar quais atributos são opcionais durante a criação de uma instância (exemplo: campos gerados automaticamente como id).
- * - A classe `Vilians` implementa `VilianAttributes` e configura os campos e suas propriedades (tipos, se são obrigatórios, valores padrão) dentro do método `init`.
+ * - A interface `HeroAttributes` define os atributos obrigatórios e opcionais do modelo Hero.
+ * - A interface `HeroCreationAttributes` estende `Optional` do Sequelize para declarar quais atributos são opcionais durante a criação de uma instância (exemplo: campos gerados automaticamente como id).
+ * - A classe `Hero` implementa `HeroAttributes` e configura os campos e suas propriedades (tipos, se são obrigatórios, valores padrão) dentro do método `init`.
  * 
- * Isso garante tipagem forte e flexibilidade na criação e manipulação dos dados do modelo Vilian.
+ * Isso garante tipagem forte e flexibilidade na criação e manipulação dos dados do modelo Hero.
  */
 
 export class Herois extends Model<HeroAttributes, HeroCreationAttributes> implements HeroAttributes {
@@ -42,6 +43,7 @@ export class Herois extends Model<HeroAttributes, HeroCreationAttributes> implem
     static inicialize(){
         const connection = new Connection().sequelize;
 
+        //Instancializa os atributos de herois
         Herois.init({
         id: {
             type: DataTypes.INTEGER,
@@ -69,14 +71,15 @@ export class Herois extends Model<HeroAttributes, HeroCreationAttributes> implem
         }, {
         sequelize: connection,
         modelName: "Heroi",
-        tableName: "herois",
+        tableName: "heros",
 
         // Permite a criação de createdAt e updateAt, de forma padrão este campo sempre é true
-        timestamps: true,
+        timestamps: false,
         });
     }
 }
 
-
+Herois.inicialize();
+Herois.hasMany(Battles, {foreignKey: 'id_heroi'});
 
 export default Herois;

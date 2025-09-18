@@ -1,29 +1,48 @@
-import dotenv from "dotenv";
-dotenv.config();
+import "dotenv/config"
 
-import express from "express";
+import express, { Application } from "express";
+import cors from 'cors';
 
 import Connection from "./src/config/db.config.ts";
 
-const app = express();
-app.use(express.json());
+import { HeroRouter } from "./src/routers/Hero.router.ts";
+import { VilianRouter } from "./src/routers/Villian.router.ts";
 
-const connetion = new Connection()
+class Server {
+    private app:Application;
+    private connetion: Connection;
 
-connetion.sequelize.authenticate()
-    .then(() => {
-        console.log("Banco de dados conenctado");
+    constructor(){
+        this.app = express();
+        this.app.use(express.json());
+        this.app.use(cors());
 
-    app.listen(process.env.PORT || 3000, () => {
-        console.log(`Servidor rodando na porta: ${process.env.PORT || 3000}`);
-    })
-})
-.catch((err) => {
-    console.error(`Falha na conexão com o banco de dados: ${err}`);
-    
-})
-//Entrada das rotas:
-//////////////////
+        this.connetion = new Connection();
 
+        this.initRoutes();
+    }
 
+    private initRoutes(){
+        this.app.use("/hero", new HeroRouter().routes());
+        this.app.use("/villian", new VilianRouter().routes());
+    }
 
+    public async start(){
+        try {
+            await this.connetion.sequelize.authenticate();
+            await this.connetion.sequelize.sync({ alter: true });
+            console.log("Banco de dados conectado");
+
+            const port = process.env.APP_PORT || 3000;
+
+            this.app.listen(port, () => {
+                console.log(`Servidor conectado na porta: ${port}`);
+            });
+            
+        } catch (err) {
+            console.error(`Falha de conexão com o banco de dados: ${err}`);  
+        }
+    }
+}
+
+new Server().start();

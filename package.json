@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
     "mysql2": "^3.15.0",
@@ -11,8 +12,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "npx tsx app.ts"
+    "dev": "tsx watch app.ts",
+    "start": "tsx app.ts"
   },
   "author": "",
   "license": "ISC",

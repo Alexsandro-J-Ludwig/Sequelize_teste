@@ -5,7 +5,7 @@ class Connection{
     
     constructor(){
         if(!process.env.DATABASE || !process.env.USER || !process.env.PASSWORD){
-            throw new Error("Variavesi de ambiente em falta")
+            throw new Error("Variaveis de ambiente em falta")
         }
 
         const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 5432;

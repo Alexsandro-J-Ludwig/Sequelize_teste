@@ -1,5 +1,6 @@
 import Connection from "../config/db.config";
-import { DataTypes, Model, Optional, Sequelize } from "sequelize";
+import { DataTypes, Model, Optional } from "sequelize";
+import Battles from "./Battle.modal";
 
 //Define os atributos de viloes
 interface VilianAttribute{
@@ -72,9 +73,12 @@ export class Vilians extends Model<VilianAttribute, VilianCreationAttibutes> imp
             tableName: "herois",
 
             // Permite a criação de createdAt e updateAt, de forma padrão este campo sempre é true
-            timestamps: true 
+            timestamps: false 
         })
     }   
 }
+
+Vilians.inicialize();
+Vilians.hasMany(Battles, {foreignKey: 'id_vilao'});
 
 export default Vilians;
