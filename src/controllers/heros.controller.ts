@@ -1,4 +1,5 @@
 import { Herois } from "../modals/heros.modal.ts"
+import HeroDTO from "../DTOs/HeroDTO.ts";
 
 //Controlador de heroi
 class HeroController{
@@ -10,6 +11,7 @@ class HeroController{
                 return res.status(400).send({ msg:"Nome e poder não podem estar vazios" });
             }
             
+            const heroi = new HeroDTO(nome, poder)
             //Realiza a implementação dos atributos de um heroi
             const heroi = await Herois.create({
                 nome:nome, poder:poder
