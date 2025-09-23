@@ -1,34 +1,28 @@
 import { Herois } from "../modals/heros.modal.ts"
-import HeroDTO from "../DTOs/HeroDTO.ts";
+import { HeroDTO } from "../DTOs/HeroDTO.ts";
+import { HeroService } from "../Services/Hero.service.ts";
+import { Request, Response } from "express";
 
 //Controlador de heroi
 class HeroController{
-    static async createHero(req, res){
+    static async createHero(req: Request, res: Response){
         try {
             const {nome, poder} = req.body;
-
-            if(!nome || !poder){
-                return res.status(400).send({ msg:"Nome e poder não podem estar vazios" });
-            }
             
-            const heroi = new HeroDTO(nome, poder)
-            //Realiza a implementação dos atributos de um heroi
-            const heroi = await Herois.create({
-                nome:nome, poder:poder
-            })
+            const heroiDTO = new HeroDTO(nome, poder)
+            const response = await HeroService.createHero(heroiDTO)
 
-            if(!heroi){
+            if(!response){
                 return res.status(400).send({ msg:"Falha ao criar heroi" })
             }
 
-            res.status(201).send({ msg:"Heroi cadastrado", data: heroi});
-
+            res.status(201).send({ msg:"Heroi cadastrado", data: response.toJSON()});
         } catch (error) {
             res.status(500).send({msg:`Erro ao cadastrar Heroi: ${error}`});
         }
     }
 
-    static async getAllHeros(_, res){
+    static async getAllHeros(_: Request, res: Response){
         try{
             const response = await Herois.findAll();
 

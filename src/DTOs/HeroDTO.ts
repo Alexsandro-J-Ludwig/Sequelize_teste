@@ -1,47 +1,56 @@
 class HeroDTO {
-    private nome:string;
-    private poder:number;
-    private vitorias?:number;
-    private derrotas?:number;
+    constructor(
+        public readonly nome?:string, 
+        public readonly poder?:number, 
+        public readonly vitorias?:number,
+        public readonly derrotas?:number,
+    ){
+        if(nome !== undefined){
+            if (!nome || nome.trim().length === 0) {
+                throw new Error("Nome é obrigatório");
+            }
+            if (nome.trim().length < 2) {
+                throw new Error("Nome deve ter pelo menos 2 caracteres");
+            }
+            if (nome.trim().length > 50) {
+                throw new Error("Nome não pode ter mais de 50 caracteres");
+            }
 
-    constructor(nome:string, poder:number, vitorias?:number, derrotas?:number){
-        this.nome = nome;
-        this.poder = poder;
-        this.vitorias = vitorias;
-        this.derrotas = derrotas;
-    }
-    
-    public getNome(): string {
-        return this.nome;
-    }
+        }
+        if(poder !== undefined){
+            if (poder < 0) {
+                throw new Error("Poder não pode ser negativo");
+            }
+            if (poder > 100) {
+                throw new Error("Poder não pode ser maior que 100");
+            }
+        }
 
-    public setNome(nome: string): void {
-        this.nome = nome;
-    }
+         if(vitorias !== undefined){
+            if (vitorias < 0) {
+                throw new Error("Vitórias não podem ser negativas");
+            }
+        }
 
-    public getPoder(): number {
-        return this.poder;
+        if(derrotas !== undefined){
+            if (derrotas < 0) {
+                throw new Error("Derrotas não podem ser negativas");
+            }
+        }
     }
-
-    public setPoder(poder: number): void {
-        this.poder = poder;
-    }
-
-    public getVitorias(): number {
-        return this.vitorias || 0;
-    }
-
-    public setVitorias(vitorias: number): void {
-        this.vitorias = vitorias;
-    }
-
-    public getDerrotas(): number {
-        return this.derrotas || 0;
-    }
-
-    public setDerrotas(derrotas: number): void {
-        this.derrotas = derrotas;
-    }   
 }
 
-export default HeroDTO;
+class HeroResponseDTO {
+    constructor(
+        public readonly id: number,
+        public readonly nome: string,
+        public readonly poder: number,
+        public readonly vitorias: number,
+        public readonly derrotas: number,
+        public readonly messagem: string
+    ){
+        if(!id && !nome && !poder && !vitorias && !derrotas) throw new Error("Não foi possível pegar o Heroi");
+    }
+}
+
+export {HeroDTO, HeroResponseDTO};
