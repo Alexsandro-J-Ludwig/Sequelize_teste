@@ -1,110 +1,86 @@
-import Vilians from "../modals/villians.modal.ts";
+import { VillianService } from "../Services/Villian.service.ts";
+import { VillianDTO, VillianUpdateDTO } from "../DTOs/VillianDTO.ts";
+import { Request, Response } from "express";
 
 // Controlador de vilão
 class VillainController {
-  static async createVillain(req, res) {
+  static async createVillain(req: Request, res: Response) {
     try {
-      const { nome, poder } = req.body;
+      const response = await VillianDTO.fromRequest(req.body);
 
-      if (!nome || !poder) {
-        return res
-          .status(400)
-          .send({ msg: "Nome e poder não podem estar vazios" });
-      }
-
-      // Realiza a implementação dos atributos de um vilão
-      const vilao = await Vilians.create({
-        nome: nome,
-        poder: poder,
-      });
-
-      if (!vilao) {
-        return res.status(400).send({ msg: "Falha ao criar vilão" });
-      }
-
-      res.status(201).send({ msg: "Vilão cadastrado", data: vilao });
-    } catch (error) {
-      res.status(500).send({ msg: `Erro ao cadastrar vilão: ${error}` });
-    }
-  }
-
-  static async getAllVillians(_, res){
-    try {
-      const response = await Vilians.findAll();
-
-      if(!response){
-        return res.status(404).send({ msg:"Nenhum vilão encontrado" })
-      }
-
-      res.status(200).send({ success:true, data:response });
-    } catch (error) {
-      res.status(500).send({ msg: `Erro ao cadastrar vilão: ${error}` });
-    }
-  }
-
-  static async getVillain(req, res) {
-    try {
-      const { nome } = req.query;
-
-      if (!nome) {
-        return res.status(400).send("Informe um vilão");
-      }
-
-      const response = await Vilians.findOne({ where: { nome: nome } });
-
-      res.status(200).send({ success: true, data: response });
-    } catch (err) {
-      res
-        .status(500)
-        .send({ success: false, error: `Erro ao buscar vilão: ${err}` });
-    }
-  }
-
-  static async updateVillain(req, res) {
-    try {
-      const { nomeVilaoConsulta, nome, poder, vitorias, derrotas } = req.body;
-
-      if (!nomeVilaoConsulta) {
+      if (!response) {
         return res.status(400).send({ msg: "Nenhum vilão informado" });
       }
 
-      const fields: { [key: string]: any } = {};
-
-      if (nome != null) fields.nome = nome;
-      if (poder != null) fields.poder = poder;
-      if (vitorias != null) fields.vitorias = vitorias;
-      if (derrotas != null) fields.derrotas = derrotas;
-
-      if (Object.keys(fields).length === 0) {
-        return res.status(400).send({ msg: "Nenhum campo para atualizar" });
-      }
-
-      const [updated] = await Vilians.update(fields, {
-        where: { nome: nomeVilaoConsulta },
-      });
-
-      if (updated === 0) {
-        return res.status(404).send({ msg: "Vilão não encontrado" });
-      }
-
-      return res.status(200).send({ msg: "Vilão atualizado com sucesso" });
+      res.status(201).send({ success: true, data: response });
     } catch (error) {
-      console.error(error);
-      return res.status(500).send({ msg: "Erro no servidor", error });
+      res.status(500).send({ msg: `Erro ao cadastrar vilão: ${error}` });
     }
   }
 
-  static async deleteVillain(req, res) {
+  static async getAllVillians(_: Request, res: Response) {
     try {
-      const { id } = req.body;
+      const response = await VillianService.getAllVillians();
 
-      await Vilians.destroy({ where: { id } });
-      res.status(200).send({ success: true });
-    } catch (err) {
-      console.log(err);
-      res
-        .status(500)
-        .send({ success: false, error: `Erro ao excluir vilão: ${err}` });
+      res.status(200).send({ success: true, data: response });
+    } catch (err: any) {
+      //Captura de erros do service e do DTO caso:
+      //Haja campos nulos
+      //O vilão já exista
+      //E caso o poder seja menor que 0
+      if (err.message === "Campos não podem estar vazios")
+        return res.status(400).send({ msg: err.message });
+      if (err.message === "Vilão já existe")
+        return res.status(400).send({ msg: err.message });
+      if (err.message === "Poder não pode ser negativo")
+        throw new Error(err.message);
+    }
+  }
+
+  static async getVillain(req: Request, res: Response) {
+    try {
+      const response = await VillianService.getVillain(req.query.nome as string);
+
+      res.status(200).send({ success: true, data: response });
+    } catch (err: any) {
+      if (err.message === "Nenhum vilão encontrado")
+        return res.status(404).send({ msg: err.message });
+    }
+  }
+
+  static async updateVillain(req: Request, res: Response) {
+    try {
+      const response = VillianUpdateDTO.fromRequest(req.body);
+
+      return res.status(200).send({ success: true, data: response });
+    } catch (err: any) {
+      //Captura os erros em service e DTOs, não há necessidade de explicar
+      if (err.message === "Nenhum vilão informado")
+        return res.status(400).send({ msg: err.message });
+      if (err.message === "Nome é obrigatório")
+        return res.status(400).send({ msg: err.message });
+      if (err.message === "Nome deve ter pelo menos 2 caracteres")
+        return res.status(400).send({ msg: err.message });
+      if (err.message === "Poder não pode ser negativo")
+        return res.status(400).send({ msg: err.message });
+      if (err.message === "Vitórias não podem ser negativas")
+        return res.status(400).send({ msg: err.message });
+      if (err.message === "Derrotas não podem ser negativas")
+        return res.status(400).send({ msg: err.message });
+      if (err.message === "Heroi não encontrado ou nenhum campo atualizado")
+        return res.status(400).send({ msg: err.message });
+    }
+  }
+
+  static async deleteVillain(req: Request, res: Response) {
+    try {
+
+      const response = await VillianService.deleteVillain(req.query.id as unknown as number);
+
+      res.status(200).send({ success: true, data: response });
+    } catch (err: any) {
+      if (err.message === "Nenhum vilão encontrado")
+        return res.status(404).send({ msg: err.message });
     }
   }
 }

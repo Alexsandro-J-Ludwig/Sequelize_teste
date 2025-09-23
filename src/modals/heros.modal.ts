@@ -60,12 +60,10 @@ export class Herois extends Model<HeroAttributes, HeroCreationAttributes> implem
         },
         vitorias: {
             type: DataTypes.INTEGER,
-            allowNull: false,
             defaultValue: 0,
         },
         derrotas: {
             type: DataTypes.INTEGER,
-            allowNull: false,
             defaultValue: 0,
         }
         }, {

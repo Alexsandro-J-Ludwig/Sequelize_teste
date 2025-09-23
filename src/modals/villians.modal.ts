@@ -25,11 +25,11 @@ interface VilianCreationAttibutes extends Optional<VilianAttribute, "id" | "vito
  */
 
 export class Vilians extends Model<VilianAttribute, VilianCreationAttibutes> implements VilianAttribute{
-    public id: number;
-    public nome: string;
-    public poder: number;
-    public vitorias: number;
-    public derrotas: number;
+    public id!: number;
+    public nome!: string;
+    public poder!: number;
+    public vitorias!: number;
+    public derrotas!: number;
 
     // Campos gerenciados automaticamente pelo Sequelize para controlar timestamps de criação e atualização.
     // São somente leitura (readonly) e do tipo Date.

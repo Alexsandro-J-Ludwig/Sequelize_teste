@@ -1,22 +1,23 @@
 import { Herois } from "../modals/heros.modal.ts"
-import { HeroDTO } from "../DTOs/HeroDTO.ts";
+import { HeroDTO, HeroUpdateDTO } from "../DTOs/HeroDTO.ts";
 import { HeroService } from "../Services/Hero.service.ts";
 import { Request, Response } from "express";
 
 //Controlador de heroi
 class HeroController{
+    //Controller para criar Heroi
     static async createHero(req: Request, res: Response){
         try {
-            const {nome, poder} = req.body;
-            
-            const heroiDTO = new HeroDTO(nome, poder)
+            //Define os elementos vindo do usuario no DTO e retorna um DTO com as informacoes necessarios
+            const heroiDTO = HeroDTO.fromRequest(req.body);
+
             const response = await HeroService.createHero(heroiDTO)
 
             if(!response){
                 return res.status(400).send({ msg:"Falha ao criar heroi" })
             }
 
-            res.status(201).send({ msg:"Heroi cadastrado", data: response.toJSON()});
+            res.status(201).send({ msg:"Heroi cadastrado", data: response});
         } catch (error) {
             res.status(500).send({msg:`Erro ao cadastrar Heroi: ${error}`});
         }
@@ -36,15 +37,9 @@ class HeroController{
         }
     }
 
-    static async getHero(req, res){
+    static async getHero(req: Request, res: Response){
         try{
-            const { nome } = req.query;
-
-            if(!nome){
-                return res.status(400).send("Informe um heroi");
-            };
-
-            const response = await Herois.findOne({ where: {nome:nome} });
+            const response = await Herois.findOne({ where: {nome: req.body.nome} });
 
             res.status(200).send({ success: true, data: response});
         } catch(err){
@@ -52,48 +47,26 @@ class HeroController{
         }
     }
 
-    static async updateHero(req, res){
+    //Atualiza o Heroi com base no DTO informado
+    static async updateHero(req: Request, res: Response){
         try {
-            const {nomeHeroiConsulta, nome, poder, vitorias, derrotas} = req.body;
+            const response = HeroUpdateDTO.fromRequest(req.body);
 
-            if(!nomeHeroiConsulta){
-                return res.status(400).send({ msg:"Nenhum heroi informado" });
-            };
-
-            const fields: { [key: string]: any }= {};
-
-            if (nome != null) fields.nome = nome;
-            if (poder != null) fields.poder = poder;
-            if (vitorias != null) fields.vitorias = vitorias;
-            if (derrotas != null) fields.derrotas = derrotas;
-
-            if (Object.keys(fields).length === 0) {
-                return res.status(400).send({ msg: "Nenhum campo para atualizar" });
-              }
-
-            const [updated] = await Herois.update(fields, {
-                where: { nome: nomeHeroiConsulta },
-              });
-
-            if (updated === 0) {
-                return res.status(404).send({ msg: "Herói não encontrado" });
+            if(!response){
+                return res.status(400).send({ msg:"Nenhum heroi informado" })
             }
 
             return res.status(200).send({ msg: "Herói atualizado com sucesso" });
         } catch (error) {
-          console.error(error);
           return res.status(500).send({ msg: "Erro no servidor", error });
         }
     }
 
-    static async deleteHero(req, res){
+    static async deleteHero(req: Request, res: Response){
         try {
-            const { id } = req.body;
-
-            await Herois.destroy({ where: { id }});
+            const response = await HeroService.deleteHero(req.query.id as unknown as number);
             res.status(200).send({ success: true });
         } catch (err) {
-            console.log(err);
             res.status(500).send({ success: false, error: `Erro ao excluir heroi: ${err}`})
         }
     }
