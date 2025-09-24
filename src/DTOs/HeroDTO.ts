@@ -6,6 +6,7 @@ class HeroDTO {
     public readonly derrotas?: number
   ) {
     if (!nome || !poder) throw new Error("Campos não podem estar vazios");
+    if (poder < 0) throw new Error("Poder não pode ser negativo");
   }
 
   static fromRequest(body: any): HeroDTO {

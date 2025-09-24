@@ -1,6 +1,5 @@
-import Connection from "../config/db.config";
-import { DataTypes, Model, Optional } from "sequelize";
-import Battles from "./Battle.modal";
+import { Model, Optional } from "sequelize";
+import { VillianRepository } from "../repository/Villian.repository";
 
 //Define os atributos de viloes
 interface VilianAttribute{
@@ -37,48 +36,6 @@ export class Vilians extends Model<VilianAttribute, VilianCreationAttibutes> imp
     //São campos genericos, uteis para logs
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
-
-    // O modificador 'static' indica que este método pertence à própria classe, e não às suas instâncias.
-    // Isso permite chamar o método diretamente pela classe, sem precisar criar um objeto com 'new'.
-    static inicialize(){
-        const connection = new Connection().sequelize;
-
-        Vilians.init({
-            id: {
-                type: DataTypes.INTEGER,
-                primaryKey: true,
-                autoIncrement: true
-            },
-            nome: {
-                type: DataTypes.STRING,
-                allowNull: false
-            },
-            poder: {
-                type: DataTypes.INTEGER,
-                allowNull: false
-            },
-            vitorias: {
-                type: DataTypes.INTEGER,
-                defaultValue: 0,
-                allowNull: false
-            },
-            derrotas: {
-                type: DataTypes.INTEGER,
-                defaultValue: 0,
-                allowNull: false
-            }
-        }, {
-            sequelize: connection,
-            modelName: "Heroi",
-            tableName: "herois",
-
-            // Permite a criação de createdAt e updateAt, de forma padrão este campo sempre é true
-            timestamps: false 
-        })
-    }   
 }
-
-Vilians.inicialize();
-Vilians.hasMany(Battles, {foreignKey: 'id_vilao'});
 
 export default Vilians;

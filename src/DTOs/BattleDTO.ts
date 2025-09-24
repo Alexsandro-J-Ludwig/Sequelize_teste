@@ -3,24 +3,25 @@
  */
 
 class BattleDTO {
-    constructor(
-        public readonly id_hero:number, 
-        public readonly id_vilian:number, 
-    ){
-        if(!id_hero || !id_vilian) throw new Error("Campos não devem estar vazios")
-    }
+  constructor(
+    public readonly id_heroi: number,
+    public readonly id_vilao: number,
+  ) {
+    if (!id_heroi || !id_vilao)
+      throw new Error("Campos não devem estar vazios");
+  }
+
+  static fromRequest(body: any): BattleDTO {
+    return new BattleDTO(body.nome_heroi, body.nome_vilao);
+  }
 }
 
-class WinnerDTO {
-    constructor(
-        public readonly nome_vencedor:string,
-        public readonly nome_perdedor:string
-    ){
-        if(!nome_perdedor || !nome_vencedor) throw new Error("Campos não podem estar vazios");
-    }
+class BattleResponseDTO {
+  constructor(
+    public readonly id: number,
+    public readonly nome_vencedor: string,
+    public readonly nome_perdedor: string
+  ) {}
 }
 
-export {
-    BattleDTO, 
-    WinnerDTO
-};
+export { BattleDTO, BattleResponseDTO };

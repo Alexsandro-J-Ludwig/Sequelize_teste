@@ -59,7 +59,7 @@ class VillianService {
   //=============================================================================
   static async deleteVillain(id: number) {
     const data = await Vilians.findOne({ where: { id: id } });
-    if (!data) throw new Error("Nenhum vilão encontrado");
+      if (!data) throw new Error("Nenhum vilão encontrado");
 
     await Vilians.destroy({ where: { id: id } });
   }

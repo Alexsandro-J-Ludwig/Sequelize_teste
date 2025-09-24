@@ -12,13 +12,14 @@ class HeroService {
 
     //Faz a criação do heroi usando o DTO como base
     const data = await Herois.create(dto);
-
     return HeroService.responseModel(data);
   }
 
   //Retorna todos os herois
   static async getAllHeros() {
     const data = await Herois.findAll();
+    if (!data) throw new Error("Nenhum vilão encontrado");
+
     return data.map((heroi) => HeroService.responseModel(heroi));
   }
 

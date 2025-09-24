@@ -8,6 +8,10 @@ import Connection from "./src/config/db.config.ts";
 import { HeroRouter } from "./src/routers/Hero.router.ts";
 import { VilianRouter } from "./src/routers/Villian.router.ts";
 
+import { BattleRepository } from "./src/repository/Battle.repository.ts";
+import { HeroRepository } from "./src/repository/Heros.repository.ts";
+import { VillianRepository } from "./src/repository/Villian.repository.ts";
+
 class Server {
     private app:Application;
     private connetion: Connection;
@@ -19,6 +23,11 @@ class Server {
         this.app.use(cors());
 
         this.connetion = new Connection();
+
+        // Instancia as associações
+        BattleRepository.inicialize();
+        HeroRepository.inicialize();
+        VillianRepository.inicialize();
 
         this.initRoutes();
     }

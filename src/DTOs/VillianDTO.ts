@@ -1,4 +1,6 @@
-//DTO de envio de requisição de Vilão
+//==================================================================
+// Construtor do DTO para criar vilão
+//==================================================================
 class VillianDTO {
   constructor(
     public readonly nome: string,
@@ -10,12 +12,15 @@ class VillianDTO {
     if (poder < 0) throw new Error("Poder não pode ser negativo");
   }
 
+  // Recebe o corpo de requisição de controller
   static fromRequest(body: any): VillianDTO {
     return new VillianDTO(body.nome, body.poder);
   }
 }
 
-//DTO de atualização de vilão
+//==================================================================
+// Construtor do DTO para os dados de atualizacao de Vilão
+//==================================================================
 class VillianUpdateDTO {
   constructor(
     public readonly nomeVilaoConsulta: string,
@@ -24,8 +29,11 @@ class VillianUpdateDTO {
     public readonly vitorias?: number,
     public readonly derrotas?: number
   ) {
+    // Valida o unico campo obrigatorio
     if (!nomeVilaoConsulta) throw new Error("Nenhum vilão informado");
 
+    // Faz a validacao de campos informados
+    //============================================================
     if (nome !== undefined) {
       if (!nome || nome.trim().length === 0)
         throw new Error("Nome é obrigatório");
@@ -44,8 +52,10 @@ class VillianUpdateDTO {
     if (derrotas !== undefined) {
       if (derrotas < 0) throw new Error("Derrotas não podem ser negativas");
     }
+    //=============================================================
   }
 
+  // Recebe o body de controller e o mapeia no DTO
   static fromRequest(body: any): VillianUpdateDTO {
     return new VillianUpdateDTO(
       body.nomeVilaoConsulta,
@@ -57,14 +67,16 @@ class VillianUpdateDTO {
   }
 }
 
-//DTO de resposta de vilão
+//==================================================================
+// Construtor do DTO par manipular os dados de retorna da requisicao
+//==================================================================
 class VillianResponseDTO {
   constructor(
     public readonly id: number,
     public readonly nome: string,
     public readonly poder: number,
     public readonly vitorias: number,
-    public readonly derrotas: number,
+    public readonly derrotas: number
   ) {}
 }
 
