@@ -1,7 +1,7 @@
-import Battles from "../modals/Battle.modal";
-import { BattleDTO, BattleResponseDTO } from "../DTOs/BattleDTO";
-import Herois from "../modals/heros.modal";
-import Vilians from "../modals/villians.modal";
+import Battles from "./Battle.modal"
+import { BattleDTO, BattleResponseDTO } from "./BattleDTO";
+import Herois from "../heros/heros.modal";
+import Vilians from "../villian/villians.modal";
 
 class BattleService {
   //============================================================================

@@ -1,6 +1,6 @@
-import { Herois } from "../modals/heros.modal.ts";
-import { HeroDTO, HeroUpdateDTO } from "../DTOs/HeroDTO.ts";
-import { HeroService } from "../Services/Hero.service.ts";
+import { Herois } from "./heros.modal.ts";
+import { HeroDTO, HeroUpdateDTO } from "./HeroDTO.ts";
+import { HeroService } from "../heros/Hero.service.ts";
 import { Request, Response } from "express";
 
 //Controlador de heroi

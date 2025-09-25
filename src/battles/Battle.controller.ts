@@ -1,6 +1,6 @@
-import { BattleService } from "../Services/Battle.service";
+import { BattleService } from "./Battle.service";
 import { Request, Response } from "express";
-import { BattleDTO } from "../DTOs/BattleDTO";
+import { BattleDTO } from "./BattleDTO";
 
 class BattleController {
     static async battle(req: Request, res: Response) {

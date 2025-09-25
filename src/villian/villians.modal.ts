@@ -1,5 +1,4 @@
 import { Model, Optional } from "sequelize";
-import { VillianRepository } from "../repository/Villian.repository";
 
 //Define os atributos de viloes
 interface VilianAttribute{

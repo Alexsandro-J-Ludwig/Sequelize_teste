@@ -1,5 +1,4 @@
 import { Model, Optional } from "sequelize";
-import { HeroRepository } from "../repository/Heros.repository";
 
 //Define os atributos de herois
 interface HeroAttributes {

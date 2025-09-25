@@ -1,5 +1,5 @@
-import Herois from "../modals/heros.modal";
-import { HeroDTO, HeroResponseDTO, HeroUpdateDTO } from "../DTOs/HeroDTO";
+import Herois from "./heros.modal";
+import { HeroDTO, HeroResponseDTO, HeroUpdateDTO } from "./HeroDTO";
 
 class HeroService {
   static async createHero(dto: HeroDTO): Promise<HeroResponseDTO> {

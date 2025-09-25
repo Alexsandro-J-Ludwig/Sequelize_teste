@@ -1,6 +1,5 @@
-import Vilians from "../modals/villians.modal";
+import Vilians from "./villians.modal";
 import Connection from "../config/db.config";
-import Battles from "../modals/Battle.modal";
 import { DataTypes, Sequelize } from "sequelize";
 
 class VillianRepository {
@@ -15,8 +14,7 @@ class VillianRepository {
   }
 
   initVillian() {
-    const Villian = this.sequelize.define(
-      "villian",
+    Vilians.init(
       {
         id: {
           type: DataTypes.INTEGER,
@@ -41,16 +39,15 @@ class VillianRepository {
         },
       },
       {
-        freezeTableName: true,
+        sequelize: this.sequelize,
+        modelName: 'Villian',
         tableName: "villian",
-
+        freezeTableName: true,
         timestamps: false,
       }
     );
 
-    Vilians.hasMany(Battles, { foreignKey: "id_vilao" });
-
-    return Villian;
+    return Vilians;
   }
 }
 

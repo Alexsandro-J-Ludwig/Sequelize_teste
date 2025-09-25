@@ -1,5 +1,5 @@
-import { VillianService } from "../Services/Villian.service.ts";
-import { VillianDTO, VillianUpdateDTO } from "../DTOs/VillianDTO.ts";
+import { VillianService } from "./Villian.service.ts";
+import { VillianDTO, VillianUpdateDTO } from "./VillianDTO.ts";
 import { Request, Response } from "express";
 
 // Controlador de vilão

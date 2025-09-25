@@ -5,12 +5,12 @@ import cors from 'cors';
 
 import Connection from "./src/config/db.config.ts";
 
-import { HeroRouter } from "./src/routers/Hero.router.ts";
-import { VilianRouter } from "./src/routers/Villian.router.ts";
+import { HeroRouter } from "./src/heros/Hero.router.ts";
+import { VilianRouter } from "./src/villian/Villian.router.ts";
 
-import { BattleRepository } from "./src/repository/Battle.repository.ts";
-import { HeroRepository } from "./src/repository/Heros.repository.ts";
-import { VillianRepository } from "./src/repository/Villian.repository.ts";
+import { BattleRepository } from "./src/battles/Battle.repository.ts";
+import { HeroRepository } from "./src/heros/Heros.repository.ts";
+import { VillianRepository } from "./src/villian/Villian.repository.ts";
 
 class Server {
     private app:Application;

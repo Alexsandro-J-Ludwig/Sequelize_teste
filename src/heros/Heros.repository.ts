@@ -1,10 +1,10 @@
-import Herois from "../modals/heros.modal";
-import Connection from "../config/db.config";
-import Battles from "../modals/Battle.modal";
 import { DataTypes, Sequelize } from "sequelize";
+import Connection from "../config/db.config";
+import Herois from "./heros.modal";
 
 class HeroRepository {
   private sequelize: Sequelize;
+
   constructor() {
     this.sequelize = new Connection().sequelize;
   }
@@ -14,8 +14,7 @@ class HeroRepository {
   }
 
   initHero() {
-    const Hero = this.sequelize.define(
-      "hero",
+    Herois.init(
       {
         id: {
           type: DataTypes.INTEGER,
@@ -40,17 +39,16 @@ class HeroRepository {
         },
       },
       {
-        freezeTableName: true,
+        sequelize: this.sequelize,
+        modelName: 'Hero',
         tableName: "hero",
-
+        freezeTableName: true,
         timestamps: false,
       }
     );
 
-    Herois.hasMany(Battles, { foreignKey: "id_heroi" });
-
-    return Hero;
+    return Herois;
   }
 }
 
-export { HeroRepository }
+export { HeroRepository };

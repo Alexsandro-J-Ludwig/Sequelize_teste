@@ -1,9 +1,9 @@
-import Vilians from "../modals/villians.modal";
+import Vilians from "./villians.modal";
 import {
   VillianDTO,
   VillianResponseDTO,
   VillianUpdateDTO,
-} from "../DTOs/VillianDTO";
+} from "./VillianDTO";
 
 class VillianService {
   //=============================================================================
